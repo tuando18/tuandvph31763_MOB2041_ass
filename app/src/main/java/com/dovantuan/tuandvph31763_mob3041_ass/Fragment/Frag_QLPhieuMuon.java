@@ -31,7 +31,7 @@ public class Frag_QLPhieuMuon extends Fragment {
         View view= inflater.inflate(R.layout.fragment_qlphieumuon, container, false);
 
         fab = view.findViewById(R.id.floatAdd);
-        rc_cv = view.findViewById(R.id.rc_cv);
+        rc_cv = view.findViewById(R.id.rc_qlpm);
 
         phieuMuonDAO = new PhieuMuonDAO(getContext());
 //        ArrayList<PhieuMuon> list = phieuMuonDAO.getAll();
