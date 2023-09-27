@@ -1,7 +1,5 @@
 package com.dovantuan.tuandvph31763_mob3041_ass.Fragment;
 
-import static androidx.constraintlayout.motion.widget.TransitionBuilder.validate;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -102,7 +100,7 @@ public class Frag_QLThanhVien extends Fragment {
     protected void openDialog(final Context context, final int type) {
         //custom dialog
         dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_add_thanhvien);
+        dialog.setContentView(R.layout.dialog_thanhvien);
         edMaTV = dialog.findViewById(R.id.edtMaTV_itemAddThanhVien);
         edTenTV = dialog.findViewById(R.id.edtTenTV_itemAddThanhVien);
         edNamSinh = dialog.findViewById(R.id.edtNamSinh_itemAddThanhVien);
@@ -112,8 +110,8 @@ public class Frag_QLThanhVien extends Fragment {
         edMaTV.setEnabled(false);
         if (type != 0) {
             edMaTV.setText(String.valueOf(item.getMaTV()));
-            edTenTV.setText(item.getNamSinh());
-            edNamSinh.setText(item.getHoTen());
+            edTenTV.setText(item.getHoTen());
+            edNamSinh.setText(item.getNamSinh());
         }
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -151,6 +149,7 @@ public class Frag_QLThanhVien extends Fragment {
                 }
             }
         });
+        dialog.show();
     }
 
     public int validate() {
