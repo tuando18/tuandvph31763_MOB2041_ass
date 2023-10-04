@@ -1,8 +1,11 @@
 package com.dovantuan.tuandvph31763_mob3041_ass.DAO;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -15,9 +18,10 @@ import java.util.List;
 public class ThuThuDAO {
     DbHelper dbHelper;
     SQLiteDatabase db;
-
+    SharedPreferences sharedPreferences;
     public ThuThuDAO(Context context) {
         dbHelper = new DbHelper(context);
+        sharedPreferences = context.getSharedPreferences("ThongTin", MODE_PRIVATE);
         db = dbHelper.getWritableDatabase();
     }
 
@@ -26,8 +30,18 @@ public class ThuThuDAO {
         values.put("maTT", obj.getMaTT());
         values.put("hoTen", obj.getHoTen());
         values.put("matKhau", obj.getMatKhau());
+
+        // Đặt giá trị mặc định cho loaiTaiKhoan nếu không được cung cấp
+        if (obj.getLoaiTaiKhoan() == null || obj.getLoaiTaiKhoan().isEmpty()) {
+            // Đặt giá trị mặc định, "1" cho thành viên
+            values.put("loaiTaiKhoan", "1");
+        } else {
+            values.put("loaiTaiKhoan", obj.getLoaiTaiKhoan());
+        }
+
         return db.insert("ThuThu", null, values);
     }
+
 
     public int updatePass(ThuThu obj) {
         ContentValues values = new ContentValues();
@@ -70,6 +84,14 @@ public class ThuThuDAO {
         SQLiteDatabase sqLiteDatabase = dbHelper.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM ThuThu WHERE maTT = ? AND matKhau = ?", new String[]{maTT, matKhau});
         if (cursor.getCount() != 0) {
+            cursor.moveToFirst();
+            // Đăng nhập thành công
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("maTT", cursor.getString(0));
+            editor.putString("loaiTaiKhoan", cursor.getString(3));
+            editor.apply();
+
             return true;
         } else {
             return  false;

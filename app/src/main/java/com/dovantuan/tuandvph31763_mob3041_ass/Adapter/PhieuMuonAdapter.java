@@ -1,79 +1,86 @@
 package com.dovantuan.tuandvph31763_mob3041_ass.Adapter;
 
-import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.Nullable;
 
+import com.dovantuan.tuandvph31763_mob3041_ass.DAO.SachDAO;
+import com.dovantuan.tuandvph31763_mob3041_ass.DAO.ThanhVienDAO;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.PhieuMuonFragment;
 import com.dovantuan.tuandvph31763_mob3041_ass.Model.PhieuMuon;
+import com.dovantuan.tuandvph31763_mob3041_ass.Model.Sach;
+import com.dovantuan.tuandvph31763_mob3041_ass.Model.ThanhVien;
 import com.dovantuan.tuandvph31763_mob3041_ass.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class PhieuMuonAdapter extends RecyclerView.Adapter<PhieuMuonAdapter.ViewHolderCV> {
-
-    ArrayList<PhieuMuon> list;
-    Context context;
-
-    public PhieuMuonAdapter(ArrayList<PhieuMuon> list, Context context) {
+public class PhieuMuonAdapter extends ArrayAdapter<PhieuMuon> {
+    private Context context;
+    PhieuMuonFragment fragment;
+    private ArrayList<PhieuMuon> list;
+    TextView tvMaPM, tvTenTV, tvTenSach, tvTienThue, tvNgay, tvTraSach;
+    ImageView imgDel;
+    SachDAO sachDAO;
+    ThanhVienDAO thanhVienDAO;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    public PhieuMuonAdapter(@NonNull Context context, PhieuMuonFragment fragment, ArrayList<PhieuMuon> list) {
+        super(context, 0, list);
         this.list = list;
         this.context = context;
+        this.fragment = fragment;
     }
 
     @NonNull
     @Override
-    public ViewHolderCV onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-        View v = inflater.inflate(R.layout.item_rc_phieumuon, parent, false);
-        ViewHolderCV holder = new ViewHolderCV(v);
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolderCV holder, int position) {
-        holder.tvMaPhieu.setText("Mã phiếu: "+list.get(position).getMaPM());
-        holder.tvThanhVien.setText("Thành viên: "+list.get(position).getTenTV());
-        holder.tvTenSach.setText("Tên sách: "+list.get(position).getTenSach());
-        holder.tvTienThue.setText("Tiền thuê: "+list.get(position).getTienThue());
-
-        String trangThai = "";
-        if (list.get(position).getTraSach() == 1) {
-            trangThai = "Đã trả sách";
-        } else {
-            trangThai = "Chưa trả sách";
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View v = convertView;
+        if (v == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            v = inflater.inflate(R.layout.item_lv_phieumuon, null);
         }
-        holder.tvTrangThai.setText(trangThai);
-        holder.tvNgayThue.setText("Ngày: "+list.get(position).getNgay());
-    }
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-    public class ViewHolderCV extends RecyclerView.ViewHolder {
-        TextView tvMaPhieu, tvThanhVien, tvTenSach, tvTienThue, tvTrangThai, tvNgayThue;
-        ImageView btn_sua,btn_xoa;
-        LinearLayout btn_xemchitiet;
-
-        public ViewHolderCV(@NonNull View itemView) {
-            super(itemView);
-            tvMaPhieu = itemView.findViewById(R.id.tvMaPhieu);
-            tvThanhVien = itemView.findViewById(R.id.tvThanhVien);
-            tvTenSach = itemView.findViewById(R.id.tvTenSach);
-            tvTienThue = itemView.findViewById(R.id.tvTienThue);
-            tvTrangThai = itemView.findViewById(R.id.tvTrangThai);
-            tvNgayThue = itemView.findViewById(R.id.tvNgayThue);
-
-            btn_xoa = itemView.findViewById(R.id.btn_remove);
-            btn_xemchitiet = itemView.findViewById(R.id.linear1);
+        final PhieuMuon item = list.get(position);
+        if (item != null) {
+            tvMaPM = v.findViewById(R.id.tvMaPhieu);
+            tvMaPM.setText("Mã phiếu: "+item.getMaPM());
+            sachDAO = new SachDAO (context);
+            Sach sach = sachDAO.getID (String.valueOf(item.getMaSach()));
+            tvTenSach = v.findViewById(R.id.tvTenSach);
+            tvTenSach.setText("Tên sách: "+sach.getTenSach());
+            thanhVienDAO = new ThanhVienDAO (context);
+            ThanhVien thanhVien = thanhVienDAO.getID (String.valueOf(item.getMaTV()));
+            tvTenTV = v.findViewById(R.id.tvThanhVien);
+            tvTenTV.setText("Thành viên: "+thanhVien.getHoTen());
+            tvTienThue = v.findViewById(R.id.tvTienThue);
+            tvTienThue.setText("Tiền thuê: "+item.getTienThue());
+            tvNgay = v.findViewById(R.id.tvNgayThue);
+            tvNgay.setText("Ngày thuê: "+sdf.format(item.getNgay()));
+            tvTraSach = v.findViewById(R.id.tvTrangThai);
+            if (item.getTraSach() == 1){
+                tvTraSach.setTextColor(Color.BLUE);
+                tvTraSach.setText("Đã trả sách");
+            }else {
+                tvTraSach.setTextColor(Color.RED);
+                tvTraSach.setText("Chưa trả sách");
+            }
+            imgDel = v.findViewById(R.id.btn_remove);
         }
+        imgDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // gọi phương thức xóa
+                fragment.xoa(String.valueOf(item.getMaPM()));
+            }
+        });
+        return v;
     }
+
 }

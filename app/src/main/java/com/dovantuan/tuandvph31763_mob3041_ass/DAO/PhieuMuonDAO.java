@@ -22,11 +22,12 @@ public class PhieuMuonDAO {
     DbHelper dbHelper;
     SQLiteDatabase db;
     private Context context;
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 
     public PhieuMuonDAO(Context context) {
         dbHelper = new DbHelper(context);
         db = dbHelper.getWritableDatabase();
+        this.context = context;
     }
 
     public long insert(PhieuMuon obj) {
@@ -35,7 +36,7 @@ public class PhieuMuonDAO {
         values.put("maTV", obj.getMaTV());
         values.put("maTT", obj.getMaTT());
         values.put("maSach", obj.getMaSach());
-        values.put("Ngay", obj.getNgay());
+        values.put("ngay", sdf.format(obj.getNgay()));
         values.put("traSach", obj.getTraSach());
         values.put("tienThue", obj.getTienThue());
 
@@ -48,7 +49,7 @@ public class PhieuMuonDAO {
         values.put("maTV", obj.getMaTV());
         values.put("maTT", obj.getMaTT());
         values.put("maSach", obj.getMaSach());
-        values.put("Ngay", obj.getNgay());
+        values.put("ngay", sdf.format(obj.getNgay()));
         values.put("traSach", obj.getTraSach());
         values.put("tienThue", obj.getTienThue());
 
@@ -66,17 +67,16 @@ public class PhieuMuonDAO {
         while (c.moveToNext()) {
             PhieuMuon obj = new PhieuMuon();
             obj.setMaPM(Integer.parseInt(c.getString(c.getColumnIndex("maPM"))));
-            obj.setMaTT(c.getString(c.getColumnIndex("maTV")));
-            obj.setMaTV(Integer.parseInt(c.getString(c.getColumnIndex("maTT"))));
+            obj.setMaTT(c.getString(c.getColumnIndex("maTT")));
+            obj.setMaTV(Integer.parseInt(c.getString(c.getColumnIndex("maTV"))));
             obj.setMaSach(Integer.parseInt(c.getString(c.getColumnIndex("maSach"))));
+            obj.setTienThue(Integer.parseInt(c.getString(c.getColumnIndex("tienThue"))));
             try {
-                obj.setNgay(String.valueOf(sdf.parse(c.getString(c.getColumnIndex("Ngay")))));
+                obj.setNgay(sdf.parse(c.getString(c.getColumnIndex("ngay"))));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             obj.setTraSach(Integer.parseInt(c.getString(c.getColumnIndex("traSach"))));
-            obj.setTienThue(Integer.parseInt(c.getString(c.getColumnIndex("tienThue"))));
-
             list.add(obj);
         }
         return list;
@@ -104,7 +104,7 @@ public class PhieuMuonDAO {
             Top top = new Top();
             Sach sach = sachDAO.getID(c.getString(c.getColumnIndex("maSach")));
             top.setTenSach(sach.getTenSach());
-            top.setSoLuong(Integer.parseInt(c.getString(c.getColumnIndex("soluong"))));
+            top.setSoLuong(Integer.parseInt(c.getString(c.getColumnIndex("soLuong"))));
             list.add(top);
         }
         return list;
@@ -112,7 +112,7 @@ public class PhieuMuonDAO {
 
     @SuppressLint("Range")
     public int getDoanhThu (String tuNgay, String denNgay) {
-        String sqlDoanhThu = "SELECT SUM(tienThue) as doanhThu FROM PhieuMuon WHERE Ngay BETWEEN ? AND ?";
+        String sqlDoanhThu = "SELECT SUM(tienThue) as doanhThu FROM PhieuMuon WHERE ngay BETWEEN ? AND ?";
         List<Integer> list = new ArrayList<Integer>();
         Cursor c = db.rawQuery(sqlDoanhThu, new String[]{tuNgay, denNgay});
         while (c.moveToNext()) {

@@ -16,7 +16,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // bảng thủ thư
-        String dbThuThu = "create table ThuThu(maTT text primary key,hoTen text not null,matKhau text not null)";
+        String dbThuThu = "create table ThuThu(maTT text primary key,hoTen text not null,matKhau text not null, loaiTaiKhoan text not null)";
         db.execSQL(dbThuThu);
         // bảng thành viên
         String dbThanhVien = "create table ThanhVien(maTV integer primary key autoincrement,hoTen text not null, namSinh text not null)";
@@ -33,10 +33,11 @@ public class DbHelper extends SQLiteOpenHelper {
         // data mẫu
         db.execSQL("INSERT INTO LoaiSach VALUES (1, 'Thiếu nhi'),(2,'Tình cảm'),(3, 'Giáo khoa')");
         db.execSQL("INSERT INTO Sach VALUES (1, 'Hãy đợi đấy', 2500, 1), (2, 'Thằng cuội', 1000, 1), (3, 'Lập trình Android', 2000, 3)");
-        db.execSQL("INSERT INTO ThuThu VALUES ('thuthu01','Nguyễn Văn Anh','abc123'),('thuthu02','Trần Văn Hùng','abc123')");
+        // 0 là admin 1 l thuthu
+        db.execSQL("INSERT INTO ThuThu VALUES ('thuthu01','Nguyễn Văn Anh','abc123',0),('thuthu02','Trần Văn Hùng','abc123',1)");
         db.execSQL("INSERT INTO ThanhVien VALUES (1,'Cao Thu Trang','2000'),(2,'Trần Mỹ Kim','2000')");
         //trả sách: 1: đã trả - 0: chưa trả
-        db.execSQL("INSERT INTO PhieuMuon VALUES (1,1,'thuthu01', 1, '19/03/2022', 1, 2500),(2,1,'thuthu01', 3, '19/03/2022', 0, 2000),(3,2,'thuthu02', 1, '19/03/2022', 1, 2000)");
+        db.execSQL("INSERT INTO PhieuMuon VALUES (1,1,'thuthu01', 1, '2022/03/19', 1, 2500),(2,1,'thuthu01', 3, '2022/03/19', 0, 2000),(3,2,'thuthu02', 1, '2022/03/19', 1, 2000)");
     }
 
     @Override

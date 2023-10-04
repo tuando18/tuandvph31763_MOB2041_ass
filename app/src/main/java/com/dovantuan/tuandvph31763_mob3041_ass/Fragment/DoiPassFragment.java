@@ -18,7 +18,7 @@ import com.dovantuan.tuandvph31763_mob3041_ass.Model.ThuThu;
 import com.dovantuan.tuandvph31763_mob3041_ass.R;
 import com.google.android.material.textfield.TextInputEditText;
 
-public class Frag_DoiPass extends Fragment {
+public class DoiPassFragment extends Fragment {
     TextInputEditText edPassOld, edPass, edRePass;
     Button btnSave, btnCancel;
     ThuThuDAO dao;
@@ -26,7 +26,7 @@ public class Frag_DoiPass extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_doimk, container, false);
+        View view = inflater.inflate(R.layout.fragment_change_pass, container, false);
 
         dao = new ThuThuDAO(getActivity());
         edPassOld = view.findViewById(R.id.edMKCu);

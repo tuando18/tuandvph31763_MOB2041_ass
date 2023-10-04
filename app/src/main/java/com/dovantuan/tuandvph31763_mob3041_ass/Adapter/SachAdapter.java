@@ -12,23 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dovantuan.tuandvph31763_mob3041_ass.DAO.LoaiSachDAO;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_Sach;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.SachFragment;
 import com.dovantuan.tuandvph31763_mob3041_ass.Model.LoaiSach;
 import com.dovantuan.tuandvph31763_mob3041_ass.Model.Sach;
-import com.dovantuan.tuandvph31763_mob3041_ass.Model.ThanhVien;
 import com.dovantuan.tuandvph31763_mob3041_ass.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SachAdapter extends ArrayAdapter<Sach> {
 
     Context context;
-    Frag_Sach fragment;
+    SachFragment fragment;
     List<Sach> list;
     TextView tvMaSach, tvTenSach, tvGiaThue, tvLoai;
     ImageView imgDel;
-    public SachAdapter(@NonNull Context context,  Frag_Sach fragment, List<Sach> list) {
+    public SachAdapter(@NonNull Context context, SachFragment fragment, List<Sach> list) {
         super(context, 0, list);
         this.context = context;
         this.fragment = fragment;
@@ -50,7 +48,6 @@ public class SachAdapter extends ArrayAdapter<Sach> {
 
             tvMaSach = v.findViewById(R.id.tvMaSach);
             tvMaSach.setText("Mã sách: " +item.getMaSach());
-
             tvTenSach = v.findViewById(R.id.tvTenSach);
             tvTenSach.setText("Tên sách: "+item.getTenSach());
             tvGiaThue = v.findViewById(R.id.tvGiaThue);

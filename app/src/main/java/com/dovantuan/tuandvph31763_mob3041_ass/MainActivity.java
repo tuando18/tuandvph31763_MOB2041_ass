@@ -8,28 +8,37 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_AddUser;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_DoanhThu;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_DoiPass;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_QLLoaiSach;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_QLPhieuMuon;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_QLThanhVien;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_Sach;
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.Frag_Top10Muon;
+import com.dovantuan.tuandvph31763_mob3041_ass.DAO.ThuThuDAO;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.AddUserFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.DoanhThuFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.DoiPassFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.LoaiSachFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.PhieuMuonFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.ThanhVienFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.SachFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.TopFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Model.ThuThu;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     Toolbar toolbar;
     NavigationView nav;
-
+    TextView edtUser;
+    View mheaderView;
+    ThuThuDAO thuThuDAO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,37 +52,50 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         nav.setItemIconTintList(null);
+        replaceFragment(new PhieuMuonFragment());
+
+        mheaderView = nav.getHeaderView(0);
+        edtUser = mheaderView.findViewById(R.id.txtUser);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("ThongTin", MODE_PRIVATE);
+        String maTT = sharedPreferences.getString("maTT", "");
+
+        thuThuDAO = new ThuThuDAO(this);
+        ThuThu thuThu = thuThuDAO.getID(maTT);
+        String username = thuThu.getHoTen();
+        edtUser.setText("Welcome " +username+ " !");
+
         nav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.nav_PhieuMuon) {
-                    Frag_QLPhieuMuon phieuMuonFragment = new Frag_QLPhieuMuon();
+                    PhieuMuonFragment phieuMuonFragment = new PhieuMuonFragment();
                     replaceFrg(phieuMuonFragment);
                 } else if (item.getItemId() == R.id.nav_LoaiSach) {
-                    Frag_QLLoaiSach loaiSachFragment = new Frag_QLLoaiSach();
+                    LoaiSachFragment loaiSachFragment = new LoaiSachFragment();
                     replaceFrg(loaiSachFragment);
                 } else if (item.getItemId() == R.id.nav_Sach) {
-                    Frag_Sach sachFragment = new Frag_Sach();
+                    SachFragment sachFragment = new SachFragment();
                     replaceFrg(sachFragment);
                 } else if (item.getItemId() == R.id.nav_TopMuon) {
-                    Frag_Top10Muon top10Fragment = new Frag_Top10Muon();
+                    TopFragment top10Fragment = new TopFragment();
                     replaceFrg(top10Fragment);
                 } else if (item.getItemId() == R.id.nav_DoanhThu) {
-                    Frag_DoanhThu doanhThuFragment = new Frag_DoanhThu();
+                    DoanhThuFragment doanhThuFragment = new DoanhThuFragment();
                     replaceFrg(doanhThuFragment);
                 } else if (item.getItemId() == R.id.nav_ThemThanhVien) {
-                    Frag_AddUser addUserFragment = new Frag_AddUser();
+                    AddUserFragment addUserFragment = new AddUserFragment();
                     replaceFrg(addUserFragment);
                 } else if (item.getItemId() == R.id.nav_DoiMatKhau) {
-                    Frag_DoiPass changePassFragment = new Frag_DoiPass();
+                    DoiPassFragment changePassFragment = new DoiPassFragment();
                     replaceFrg(changePassFragment);
                 } else if (item.getItemId() == R.id.nav_ThanhVien) {
-                    Frag_QLThanhVien thanhVienFragment = new Frag_QLThanhVien();
+                    ThanhVienFragment thanhVienFragment = new ThanhVienFragment();
                     replaceFrg(thanhVienFragment);
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setTitle("Cảnh báo");
-                    builder.setIcon(R.drawable.baseline_warning_24);
+                    builder.setIcon(R.drawable.thongbao);
                     builder.setMessage("Bạn có muốn đăng xuất không?");
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
@@ -96,10 +118,27 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        // hiện thị chwusc năng admin
+        SharedPreferences sharedPreferences1 = getSharedPreferences("ThongTin", MODE_PRIVATE);
+        String loaiTK = sharedPreferences1.getString("loaiTaiKhoan", "");
+        int loaiTKInt = Integer.parseInt(loaiTK);
+
+        if (loaiTKInt != 0) {
+            Menu menu = nav.getMenu();
+            menu.findItem(R.id.nav_ThemThanhVien).setVisible(false);
+        }
+
     }
 
     public void replaceFrg(Fragment frg) {
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.frag_content, frg).commit();
+    }
+    void replaceFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frag_content, fragment);
+        setTitle("Quản lý phiếu mượn");
+        transaction.commit();
     }
 }

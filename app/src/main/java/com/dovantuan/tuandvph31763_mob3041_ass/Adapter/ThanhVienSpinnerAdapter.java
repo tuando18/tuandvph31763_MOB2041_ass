@@ -16,11 +16,11 @@ import com.dovantuan.tuandvph31763_mob3041_ass.R;
 
 import java.util.ArrayList;
 
-public class LoaiSachSpinnerAdapter extends ArrayAdapter<LoaiSach> {
-    private ArrayList<LoaiSach> list;
+public class ThanhVienSpinnerAdapter extends ArrayAdapter<ThanhVien> {
+    private ArrayList<ThanhVien> list;
     private Context context;
-    TextView tvMaLoai, tvTenLoai;
-    public LoaiSachSpinnerAdapter(@NonNull Context context, ArrayList<LoaiSach> list) {
+    TextView tvMaTV, tvTenTV;
+    public ThanhVienSpinnerAdapter(@NonNull Context context, ArrayList<ThanhVien> list) {
         super(context, 0, list);
         this.list = list;
         this.context = context;
@@ -33,15 +33,14 @@ public class LoaiSachSpinnerAdapter extends ArrayAdapter<LoaiSach> {
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.item_loaisach_spinner,null);
+            v = inflater.inflate(R.layout.item_thanhvien_spinner,null);
         }
-        final LoaiSach item = list.get(position);
+        final ThanhVien item = list.get(position);
         if (item != null) {
-            tvMaLoai = v.findViewById(R.id.tvMaLoaiSachSp);
-            tvMaLoai.setText(item.getMaLoai()+". ");
-            tvTenLoai = v.findViewById(R.id.tvTenLoaiSachSp);
-            tvTenLoai.setText(item.getTenLoai());
-
+            tvMaTV = v.findViewById(R.id.tvMaTVSp);
+            tvMaTV.setText(item.getMaTV()+". ");
+            tvTenTV = v.findViewById(R.id.tvTenTVSp);
+            tvTenTV.setText(item.getHoTen());
         }
         return v;
     }
@@ -52,15 +51,14 @@ public class LoaiSachSpinnerAdapter extends ArrayAdapter<LoaiSach> {
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.item_loaisach_spinner,null);
+            v = inflater.inflate(R.layout.item_thanhvien_spinner,null);
         }
-        final LoaiSach item = list.get(position);
+        final ThanhVien item = list.get(position);
         if (item != null) {
-            tvMaLoai = v.findViewById(R.id.tvMaLoaiSachSp);
-            tvMaLoai.setText(item.getMaLoai()+". ");
-            tvTenLoai = v.findViewById(R.id.tvTenLoaiSachSp);
-            tvTenLoai.setText(item.getTenLoai());
-
+            tvMaTV = v.findViewById(R.id.tvMaTVSp);
+            tvMaTV.setText(item.getMaTV()+". ");
+            tvTenTV = v.findViewById(R.id.tvTenTVSp);
+            tvTenTV.setText(item.getHoTen());
         }
         return  v;
     }

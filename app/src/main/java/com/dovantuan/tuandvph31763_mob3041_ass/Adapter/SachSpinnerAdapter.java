@@ -10,17 +10,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.dovantuan.tuandvph31763_mob3041_ass.Model.LoaiSach;
-import com.dovantuan.tuandvph31763_mob3041_ass.Model.ThanhVien;
+import com.dovantuan.tuandvph31763_mob3041_ass.Model.Sach;
 import com.dovantuan.tuandvph31763_mob3041_ass.R;
 
 import java.util.ArrayList;
 
-public class LoaiSachSpinnerAdapter extends ArrayAdapter<LoaiSach> {
-    private ArrayList<LoaiSach> list;
+public class SachSpinnerAdapter extends ArrayAdapter<Sach> {
+    private ArrayList<Sach> list;
     private Context context;
-    TextView tvMaLoai, tvTenLoai;
-    public LoaiSachSpinnerAdapter(@NonNull Context context, ArrayList<LoaiSach> list) {
+    TextView tvMaSach, tvTenSach;
+
+    public SachSpinnerAdapter(@NonNull Context context, ArrayList<Sach> list) {
         super(context, 0, list);
         this.list = list;
         this.context = context;
@@ -33,14 +33,14 @@ public class LoaiSachSpinnerAdapter extends ArrayAdapter<LoaiSach> {
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.item_loaisach_spinner,null);
+            v = inflater.inflate(R.layout.item_sach_spinner, null);
         }
-        final LoaiSach item = list.get(position);
+        final Sach item = list.get(position);
         if (item != null) {
-            tvMaLoai = v.findViewById(R.id.tvMaLoaiSachSp);
-            tvMaLoai.setText(item.getMaLoai()+". ");
-            tvTenLoai = v.findViewById(R.id.tvTenLoaiSachSp);
-            tvTenLoai.setText(item.getTenLoai());
+            tvMaSach = v.findViewById(R.id.tvMaSachSp);
+            tvMaSach.setText(item.getMaSach() + ". ");
+            tvTenSach = v.findViewById(R.id.tvTenSachSp);
+            tvTenSach.setText(item.getTenSach());
 
         }
         return v;
@@ -52,16 +52,15 @@ public class LoaiSachSpinnerAdapter extends ArrayAdapter<LoaiSach> {
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.item_loaisach_spinner,null);
+            v = inflater.inflate(R.layout.item_sach_spinner, null);
         }
-        final LoaiSach item = list.get(position);
+        final Sach item = list.get(position);
         if (item != null) {
-            tvMaLoai = v.findViewById(R.id.tvMaLoaiSachSp);
-            tvMaLoai.setText(item.getMaLoai()+". ");
-            tvTenLoai = v.findViewById(R.id.tvTenLoaiSachSp);
-            tvTenLoai.setText(item.getTenLoai());
-
+            tvMaSach = v.findViewById(R.id.tvMaSachSp);
+            tvMaSach.setText(item.getMaSach() + ". ");
+            tvTenSach = v.findViewById(R.id.tvTenSachSp);
+            tvTenSach.setText(item.getTenSach());
         }
-        return  v;
+        return v;
     }
 }

@@ -36,16 +36,17 @@ public class LoaiSachDAO {
     }
 
     public int delete(String id) {
-        return db.delete("LoaiSach","maLoai=?", new String[]{id});
+        return db.delete("LoaiSach", "maLoai=?", new String[]{id});
     }
+
     @SuppressLint("Range")
-    public List<LoaiSach> getData(String sql, String...selectionArgs) {
+    public List<LoaiSach> getData(String sql, String... selectionArgs) {
         List<LoaiSach> list = new ArrayList<LoaiSach>();
         Cursor c = db.rawQuery(sql, selectionArgs);
         while (c.moveToNext()) {
             LoaiSach obj = new LoaiSach();
             obj.setMaLoai(Integer.parseInt(c.getString(c.getColumnIndex("maLoai"))));
-            obj.setTenLoai(c.getString(c.getColumnIndex( "tenLoai")));
+            obj.setTenLoai(c.getString(c.getColumnIndex("tenLoai")));
             list.add(obj);
         }
         return list;

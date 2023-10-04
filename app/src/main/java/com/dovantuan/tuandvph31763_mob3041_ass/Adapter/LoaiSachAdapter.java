@@ -11,54 +11,49 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.ThanhVienFragment;
-import com.dovantuan.tuandvph31763_mob3041_ass.Model.ThanhVien;
+import com.dovantuan.tuandvph31763_mob3041_ass.Fragment.LoaiSachFragment;
+import com.dovantuan.tuandvph31763_mob3041_ass.Model.LoaiSach;
 import com.dovantuan.tuandvph31763_mob3041_ass.R;
 
 import java.util.ArrayList;
 
-public class ThanhVienAdapter extends ArrayAdapter<ThanhVien> {
 
-    private ArrayList<ThanhVien> list;
+public class LoaiSachAdapter extends ArrayAdapter<LoaiSach> {
+    private ArrayList<LoaiSach> list;
     private Context context;
-    ThanhVienFragment fragment;
-    TextView tvMaTv, tvTenTv, tvNamSinh;
+    LoaiSachFragment fragment;
+    TextView tvMaLoai, tvTenLoai;
     ImageView imgDel;
 
-    public ThanhVienAdapter(@NonNull Context context, ThanhVienFragment fragment, ArrayList<ThanhVien> list) {
+    public LoaiSachAdapter(@NonNull Context context, LoaiSachFragment fragment, ArrayList<LoaiSach> list) {
         super(context, 0, list);
         this.list = list;
         this.context = context;
         this.fragment = fragment;
     }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         if (v == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            v = inflater.inflate(R.layout.item_lv_thanhvien, null);
+            v = inflater.inflate(R.layout.item_lv_loaisach, null);
         }
-        final ThanhVien item = list.get(position);
+        final LoaiSach item = list.get(position);
         if (item != null) {
-            tvMaTv = v.findViewById(R.id.tvMaTv);
-            tvMaTv.setText("Mã thành viên: " + item.getMaTV());
-            tvTenTv = v.findViewById(R.id.tvTenTv);
-            tvTenTv.setText("Tên thành viên: " + item.getHoTen());
-            tvNamSinh = v.findViewById(R.id.tvNamSinh);
-            tvNamSinh.setText("Năm sinh: " + item.getNamSinh());
+            tvMaLoai = v.findViewById(R.id.tvMaLoaiSach);
+            tvMaLoai.setText("Mã loại: " + item.getMaLoai());
+            tvTenLoai = v.findViewById(R.id.tvTenLoaiSach);
+            tvTenLoai.setText("Tên loại: " + item.getTenLoai());
             imgDel = v.findViewById(R.id.btn_remove);
         }
         imgDel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // gọi phương thức xóa
-                fragment.xoa(String.valueOf(item.getMaTV()));
+                fragment.xoa(String.valueOf(item.getMaLoai()));
             }
         });
         return v;
     }
-
-
 }

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,47 +15,36 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.dovantuan.tuandvph31763_mob3041_ass.Adapter.LoaiSachSpinnerAdapter;
-import com.dovantuan.tuandvph31763_mob3041_ass.Adapter.SachAdapter;
+import com.dovantuan.tuandvph31763_mob3041_ass.Adapter.LoaiSachAdapter;
 import com.dovantuan.tuandvph31763_mob3041_ass.DAO.LoaiSachDAO;
-import com.dovantuan.tuandvph31763_mob3041_ass.DAO.SachDAO;
 import com.dovantuan.tuandvph31763_mob3041_ass.Model.LoaiSach;
-import com.dovantuan.tuandvph31763_mob3041_ass.Model.Sach;
 import com.dovantuan.tuandvph31763_mob3041_ass.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Frag_Sach extends Fragment {
-    ListView lvSach;
-    List<Sach> list;
+public class LoaiSachFragment extends Fragment {
+    ListView lvLoaiSach;
+    ArrayList<LoaiSach> list;
     FloatingActionButton fab;
     Dialog dialog;
-    EditText edMaSach, edTenSach, edGiaThue;
+    EditText edMaLoai, edTenLoai;
     Button btnSave, btnCancel;
-    Spinner spinner;
-    static SachDAO dao;
-    SachAdapter adapter;
-    Sach item;
-    LoaiSachSpinnerAdapter spinnerAdapter;
-    ArrayList<LoaiSach> listLoaiSach;
-    LoaiSachDAO loaiSachDAO;
-    LoaiSach loaiSach;
-    int maLoaiSach, position;
+    static LoaiSachDAO dao;
+    LoaiSachAdapter adapter;
+    LoaiSach item;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_qlsach, container, false);
-        lvSach = v.findViewById(R.id.lvSach);
+        View v = inflater.inflate(R.layout.fragment_loai_sach, container, false);
+        lvLoaiSach = v.findViewById(R.id.lvLoaiSach);
         fab = v.findViewById(R.id.fltAdd);
-        dao = new SachDAO(getActivity());
-        capNhatSach();
+        dao = new LoaiSachDAO(getActivity());
+        capNhatLoaiSach();
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +53,7 @@ public class Frag_Sach extends Fragment {
             }
         });
 
-        lvSach.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lvLoaiSach.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
                 item = list.get(i);
@@ -77,22 +65,23 @@ public class Frag_Sach extends Fragment {
         return v;
     }
 
-    void capNhatSach() {
-        list = (List<Sach>) dao.getAll();
-        adapter = new SachAdapter(getActivity(), this, list);
-        lvSach.setAdapter(adapter);
+    void capNhatLoaiSach() {
+        list = (ArrayList<LoaiSach>) dao.getAll();
+        adapter = new LoaiSachAdapter(getActivity(), this, list);
+        lvLoaiSach.setAdapter(adapter);
     }
 
     public void xoa(final String Id) {
         // Su dung Alert
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Delete");
+        builder.setIcon(R.drawable.thongbao);
         builder.setMessage("Bạn có muốn xóa không? ?");
         builder.setCancelable(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 dao.delete(Id);
-                capNhatSach();
+                capNhatLoaiSach();
                 dialog.cancel();
             }
         });
@@ -111,59 +100,31 @@ public class Frag_Sach extends Fragment {
     protected void openDialog(final Context context, final int type) {
         //custom dialog
         dialog = new Dialog(context);
-        dialog.setContentView(R.layout.dialog_sach);
-        edMaSach = dialog.findViewById(R.id.edtMaSach_itemSach);
-        edTenSach = dialog.findViewById(R.id.edtTenSach_itemSach);
-        edGiaThue = dialog.findViewById(R.id.edtGiaThue_itemSach);
-        spinner = dialog.findViewById(R.id.spLoaiSach);
-        btnCancel = dialog.findViewById(R.id.btnCancelSach);
-        btnSave = dialog.findViewById(R.id.btnSaveSach);
+        dialog.setContentView(R.layout.dialog_loaisach);
+        edMaLoai = dialog.findViewById(R.id.edtMaLoaiSach_itemAddLoaiSach);
+        edTenLoai = dialog.findViewById(R.id.edtTenLoaiSach_itemAddLoaiSach);
 
-        listLoaiSach = new ArrayList<LoaiSach>();
-        loaiSachDAO = new LoaiSachDAO(context);
-        listLoaiSach = (ArrayList<LoaiSach>) loaiSachDAO.getAll();
-
-        spinnerAdapter = new LoaiSachSpinnerAdapter(context, listLoaiSach);
-        spinner.setAdapter(spinnerAdapter);
-        // Lay maLoaiSach
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                maLoaiSach = listLoaiSach.get(position).getMaLoai();
-                Toast.makeText(context, "Chọn " + listLoaiSach.get(position).getTenLoai(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        edMaSach.setEnabled(false);
+        btnCancel = dialog.findViewById(R.id.btnHuy);
+        btnSave = dialog.findViewById(R.id.btnLuu);
+        //kiem tra type insert 0 hay Update 1
+        edMaLoai.setEnabled(false);
         if (type != 0) {
-            edMaSach.setText(String.valueOf(item.getMaSach()));
-            edTenSach.setText(item.getTenSach());
-            edGiaThue.setText(String.valueOf(item.getGiaThue()));
-            for (int i = 0; i < listLoaiSach.size(); i++)
-                if (item.getMaLoai() == (listLoaiSach.get(i).getMaLoai())) {
-                    position = i;
-                }
-            Log.i("demo", "posSach " + position);
-            spinner.setSelection(position);
+            edMaLoai.setText(String.valueOf(item.getMaLoai()));
+            edTenLoai.setText(item.getTenLoai());
         }
+
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
             }
         });
+
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                item = new Sach();
-                item.setTenSach(edTenSach.getText().toString());
-                item.setGiaThue(Integer.parseInt(edGiaThue.getText().toString()));
-                item.setMaLoai(maLoaiSach);
-
+            public void onClick(View view) {
+                item = new LoaiSach();
+                item.setTenLoai(edTenLoai.getText().toString());
                 if (validate() > 0) {
                     if (type == 0) {
                         //type = 0 (insert)
@@ -174,14 +135,14 @@ public class Frag_Sach extends Fragment {
                         }
                     } else {
                         //type =1 (update)
-                        item.setMaSach(Integer.parseInt(edMaSach.getText().toString()));
-                        if (dao.updateS(item) > 0) {
+                        item.setMaLoai(Integer.parseInt(edMaLoai.getText().toString()));
+                        if (dao.update(item) > 0) {
                             Toast.makeText(context, "Sứa thành công", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(context, "Sứa thất bại", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    capNhatSach();
+                    capNhatLoaiSach();
                     dialog.dismiss();
                 }
             }
@@ -191,11 +152,10 @@ public class Frag_Sach extends Fragment {
 
     public int validate() {
         int check = 1;
-        if (edTenSach.getText().length() == 0 || edGiaThue.getText().length() == 0) {
+        if (edTenLoai.getText().length() == 0) {
             Toast.makeText(getContext(), "Bạn phải nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             check = -1;
         }
         return check;
     }
-
 }

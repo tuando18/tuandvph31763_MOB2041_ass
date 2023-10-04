@@ -48,7 +48,9 @@
         android:id="@+id/chkLuuTK"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lưu tài khoản" />
+        android:buttonTint="#0a3d62"
+        android:text="Lưu tài khoản"
+        android:textColor="#0a3d62" />
 
     <LinearLayout
         android:layout_width="match_parent"

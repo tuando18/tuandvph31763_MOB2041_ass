@@ -84,11 +84,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (validateInput(user, pass)) {
                     if (thuThuDAO.checkLogin(user, pass)) {
-                        // Đăng nhập thành công
-                        SharedPreferences sharedPreferences = getSharedPreferences("ThongTin", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("maTT", user);
-                        editor.apply();
 
                         Toast.makeText(LoginActivity.this, "Đăng Nhập Thành Công", Toast.LENGTH_SHORT).show();
                         rememberUser(user, pass, chkLuuTK.isChecked());

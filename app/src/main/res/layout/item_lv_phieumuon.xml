@@ -56,7 +56,7 @@
         android:layout_alignTop="@id/linear1"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:backgroundTint="#8BC34A"
         android:src="@drawable/bin" />
 

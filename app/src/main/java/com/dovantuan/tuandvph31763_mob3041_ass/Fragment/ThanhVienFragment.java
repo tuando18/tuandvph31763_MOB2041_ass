@@ -25,7 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class Frag_QLThanhVien extends Fragment {
+public class ThanhVienFragment extends Fragment {
     ListView lvThanhVien;
     ArrayList<ThanhVien> list;
     FloatingActionButton fab;
@@ -40,7 +40,7 @@ public class Frag_QLThanhVien extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_qlthanhvien, container, false);
+        View v = inflater.inflate(R.layout.fragment_thanh_vien, container, false);
         lvThanhVien = v.findViewById(R.id.lvThanhVien);
         fab = v.findViewById(R.id.fltAdd);
         dao = new ThanhVienDAO(getActivity());
@@ -76,6 +76,7 @@ public class Frag_QLThanhVien extends Fragment {
         // Su dung Alert
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Delete");
+        builder.setIcon(R.drawable.thongbao);
         builder.setMessage("Bạn có muốn xóa không? ?");
         builder.setCancelable(true);
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
